@@ -19,6 +19,79 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+			getContacts: async () => {
+				const response = await fetch(
+				  "https://playground.4geeks.com/contact/agenda/Knightlife27/contacts"
+				);
+				if (!response.ok) {getActions().createAgenda()}
+				const data = await response.json();
+				setStore({ contacts: data.contacts });
+			  },
+			  addContact: async (name, phone, email, address) => {
+				const store = getStore();
+				const response = await fetch(
+				  "https://playground.4geeks.com/agendas/Knightlife27/contacts",
+				  {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+					  name: name,
+					  phone: phone,
+					  email: email,
+					  address: address,
+					}),
+				  }
+				);
+				const data = await response.json();
+				getActions().getContacts()
+			  },
+			  deleteContact: async (id) => {
+				const store = getStore();
+				const response = await fetch(
+				  "https://playground.4geeks.com/apis/fake/contact/" + id,
+				  {
+					method: "DELETE",
+					headers: { "Content-Type": "application/json" },
+				  }
+				);
+				const data = await response.json();
+				setStore({
+				  contacts: store.contacts.filter((contact) => contact.id !== id),
+				});
+			  },
+			  editContact: async (id, name, phone, email, address) => {
+				const store = getStore();
+				const response = await fetch(
+				  "https://playground.4geeks.com/apis/fake/contact/" + id,
+				  {
+					method: "PUT",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+					  full_name: name,
+					  phone: phone,
+					  email: email,
+					  address: address,
+					}),
+				  }
+				);
+				const data = await response.json();
+				setStore({ contacts: [...store.contacts, data] });
+			  },
+
+			  createAgenda: async () => {
+				const store = getStore();
+				const response = await fetch(
+				  "https://playground.4geeks.com/agendas/Knightlife27",
+				  {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+					}),
+				  }
+				);
+				const data = await response.json();
+			
+			  },
 			loadSomeData: () => {
 				/**
 					fetch().then().then(data => setStore({ "foo": data.bar }))
