@@ -53,7 +53,7 @@ const Contacts = () => {
   };
 
   const deleteContact = () => {
-    actions.deleteContact(id);
+    actions.deleteContact(id); // TODO not work | 404 ID not found (API ISSUE)
     navigate("/");
   };
 

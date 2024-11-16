@@ -1,18 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			contacts: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -21,7 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getContacts: async () => {
 				const response = await fetch(
-				  "https://playground.4geeks.com/contact/agenda/Knightlife27/contacts"
+				  "https://playground.4geeks.com/contact/agendas/Knightlife27/contacts"
 				);
 				if (!response.ok) {getActions().createAgenda()}
 				const data = await response.json();
@@ -30,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  addContact: async (name, phone, email, address) => {
 				const store = getStore();
 				const response = await fetch(
-				  "https://playground.4geeks.com/agendas/Knightlife27/contacts",
+				  "https://playground.4geeks.com/contact/agendas/Knightlife27/contacts",
 				  {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -48,21 +37,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  deleteContact: async (id) => {
 				const store = getStore();
 				const response = await fetch(
-				  "https://playground.4geeks.com/apis/fake/contact/" + id,
+				  "https://playground.4geeks.com/contact/agendas/KnightLife27/contacts/" + id,
 				  {
 					method: "DELETE",
 					headers: { "Content-Type": "application/json" },
 				  }
 				);
 				const data = await response.json();
-				setStore({
-				  contacts: store.contacts.filter((contact) => contact.id !== id),
-				});
+				getActions().getContacts()
+
 			  },
 			  editContact: async (id, name, phone, email, address) => {
 				const store = getStore();
 				const response = await fetch(
-				  "https://playground.4geeks.com/apis/fake/contact/" + id,
+				  "https://playground.4geeks.com/contact/agendas/KnightLife27/contacts/" + id,
 				  {
 					method: "PUT",
 					headers: { "Content-Type": "application/json" },
@@ -75,13 +63,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  }
 				);
 				const data = await response.json();
-				setStore({ contacts: [...store.contacts, data] });
+				getActions().getContacts()
 			  },
 
 			  createAgenda: async () => {
 				const store = getStore();
 				const response = await fetch(
-				  "https://playground.4geeks.com/agendas/Knightlife27",
+				  "https://playground.4geeks.com/contact/agendas/Knightlife27/",
 				  {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
