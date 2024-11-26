@@ -12,7 +12,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const response = await fetch(
 				  "https://playground.4geeks.com/contact/agendas/Knightlife27/contacts"
 				);
-				if (!response.ok) {getActions().createAgenda()}
+				if (!response.ok) {getActions().createAgenda()
+					return;
+				}
 				const data = await response.json();
 				setStore({ contacts: data.contacts });
 			  },
